@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 
-app.use(require('./routes/person'));
-app.use(require('./routes/activity'));
-app.use(require('./routes/notification'));
-app.use(require('./routes/sponsor'));
+app.use(require('./person'));
+app.use(require('./activity'));
+app.use(require('./notification'));
+app.use(require('./sponsor'));
 
 module.exports = app;
