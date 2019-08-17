@@ -1,6 +1,6 @@
 /*
 ACCIONES PARA LOS TIPOS DE USUARIOS
-admin: read
+admin: read, create - post, put
 user: read
 invited: read
 */
@@ -9,10 +9,11 @@ const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Sponsor = require('../models/sponsor');
 const app = express();
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
-app.get('/sponsor', function(req, res) {
+app.get('/sponsor', verificaToken, function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -43,7 +44,7 @@ app.get('/sponsor', function(req, res) {
         });
 });
 // POST para crear registros
-app.post('/sponsor', function(req, res) {
+app.post('/sponsor', [verificaToken, verificaAdmin_Role], function(req, res) {
     let body = req.body;
 
     let sponsor1 = new Sponsor({

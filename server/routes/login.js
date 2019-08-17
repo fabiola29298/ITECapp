@@ -7,18 +7,22 @@ const jwt = require('jsonwebtoken');
 const Person = require('../models/person');
 const app = express();
 
+
+
 app.post('/login', (req, res) => {
 
     let body = req.body;
 
-    Person.findOne({ email: body.email }, (err, PersonDB) => {
+    Person.findOne({ email: body.email }, (err, personDB) => {
+
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             });
         }
-        if (!PersonDB) {
+
+        if (!personDB) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -28,7 +32,7 @@ app.post('/login', (req, res) => {
         }
         // identificar si la contra hace match con el db
 
-        if (!bcrypt.compareSync(body.password, PersonDB.password)) {
+        if (!bcrypt.compareSync(body.password, personDB.password)) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -36,14 +40,14 @@ app.post('/login', (req, res) => {
                 }
             });
         }
-        let token = jwt.sign({
-            Person: PersonDB
-        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
+        let token = jwt.sign({
+            usuario: personDB
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
         res.json({
             ok: true,
-            PersonDB,
+            usuario: personDB,
             token
         });
 

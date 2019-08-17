@@ -9,11 +9,13 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Person = require('../models/person');
+
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 const app = express();
 
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
-app.get('/person', function(req, res) {
+app.get('/person', [verificaToken, verificaAdmin_Role], function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -23,7 +25,7 @@ app.get('/person', function(req, res) {
     Person.find({ status: true })
         .skip(desde)
         .limit(limite)
-        .exec((err, persons) => {
+        .exec((err, person) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -34,7 +36,7 @@ app.get('/person', function(req, res) {
             Person.count({ status: true }, (err, conteo) => {
                 res.json({
                     ok: true,
-                    persons,
+                    person,
                     cuantos: conteo
                 });
             });
@@ -44,7 +46,7 @@ app.get('/person', function(req, res) {
         });
 });
 // POST para crear registros
-app.post('/person', function(req, res) {
+app.post('/person', verificaToken, function(req, res) {
     let body = req.body;
 
     let person = new Person({

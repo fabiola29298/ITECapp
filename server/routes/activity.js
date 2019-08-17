@@ -8,11 +8,13 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Activity = require('../models/activity');
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+
 const app = express();
 
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
-app.get('/activity', function(req, res) {
+app.get('/activity', verificaToken, function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -45,7 +47,7 @@ app.get('/activity', function(req, res) {
     })
 });
 // POST para crear registros
-app.post('/activity', function(req, res) {
+app.post('/activity', verificaToken, function(req, res) {
     let body = req.body;
 
     let activity = new Activity({
@@ -75,7 +77,7 @@ app.post('/activity', function(req, res) {
     });
 });
 // PUT Para actualizar registros
-app.put('/activity/:id', function(req, res) {
+app.put('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     let id = req.params.id;
 
     let body = _.pick(req.body, ['speaker_id', 'name', 'type', 'date', 'description', 'start_time', 'end_time', 'classroom', 'block_campus']);
@@ -96,7 +98,7 @@ app.put('/activity/:id', function(req, res) {
     });
 });
 //DELETE cambiar de status a false
-app.delete('/activity/:id', function(req, res) {
+app.delete('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     let id = req.params.id;
 
     let cambiaStatus = {
