@@ -6,4 +6,7 @@ app.use(require('./activity'));
 app.use(require('./notification'));
 app.use(require('./sponsor'));
 app.use(require('./login'));
+app.use(require('./schedule'));
+app.use(require('./assist_control'));
+app.use(require('./assist'));
 module.exports = app;
