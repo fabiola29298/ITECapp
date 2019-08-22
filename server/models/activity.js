@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let activitySchema = new Schema({
-    speaker_id: {
-        type: String,
-        required: false,
-        default: 'Ninguno'
+    person: {
+        type: Schema.Types.ObjectId,
+        ref: 'Person',
+
+        required: false
     },
     name: {
         type: String,

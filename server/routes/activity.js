@@ -14,6 +14,7 @@ const app = express();
 
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
+
 app.get('/activity', verificaToken, function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -25,6 +26,7 @@ app.get('/activity', verificaToken, function(req, res) {
     Activity.find({ status: true })
         .skip(desde)
         .limit(limite)
+        .populate('person', 'name last_name degree description url_image career ')
 
     .exec((err, activity) => {
         if (err) {
@@ -51,7 +53,7 @@ app.post('/activity', verificaToken, function(req, res) {
     let body = req.body;
 
     let activity = new Activity({
-        speaker_id: body.speaker_id,
+        person: body.person,
         name: body.name,
         type: body.type,
         date: body.date,
@@ -80,7 +82,7 @@ app.post('/activity', verificaToken, function(req, res) {
 app.put('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     let id = req.params.id;
 
-    let body = _.pick(req.body, ['speaker_id', 'name', 'type', 'date', 'description', 'start_time', 'end_time', 'classroom', 'block_campus']);
+    let body = _.pick(req.body, ['person', 'name', 'type', 'date', 'description', 'start_time', 'end_time', 'classroom', 'block_campus']);
 
     Activity.findByIdAndUpdate(id, body, { new: true }, (err, activityDB) => {
 
@@ -131,4 +133,64 @@ app.delete('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, r
 });
 
 
+// ===========================
+//  Buscar por tipo
+// ===========================
+app.get('/activity/buscar/tipo/:termino', verificaToken, (req, res) => {
+
+    let termino = req.params.termino;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    let regex = new RegExp(termino, 'i');
+
+    Activity.find({ type: regex })
+        .populate('person', 'name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                activity: activityDB
+            })
+
+        })
+
+
+});
+// ===========================
+//  Buscar por nombre
+// ===========================
+app.get('/activity/buscar/name/:termino', verificaToken, (req, res) => {
+
+    let termino = req.params.termino;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    let regex = new RegExp(termino, 'i');
+
+    Activity.find({ name: regex })
+        .populate('person', 'name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                activity: activityDB
+            })
+
+        })
+
+
+});
 module.exports = app;

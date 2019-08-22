@@ -74,7 +74,7 @@ app.delete('/schedule/:id', [verificaToken], function(req, res) {
         status: false
     }
 
-    Schedule.findByIdAndUpdate(id, cambiaStatus, { new: true }, (err, scheduleDelete) => {
+    Schedule.findOneAndUpdate(id, cambiaStatus, { new: true }, (err, scheduleDelete) => {
 
         if (err) {
             return res.status(400).json({
