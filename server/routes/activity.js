@@ -15,39 +15,41 @@ const app = express();
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
 
-app.get('/activity', verificaToken, function(req, res) {
-    let desde = req.query.desde || 0;
-    desde = Number(desde);
+app.get('/activity',
+    //verificaToken,
+    function(req, res) {
+        let desde = req.query.desde || 0;
+        desde = Number(desde);
 
-    let limite = req.query.limite || 5;
-    limite = Number(limite);
+        let limite = req.query.limite || 5;
+        limite = Number(limite);
 
 
-    Activity.find({ status: true })
-        .skip(desde)
-        .limit(limite)
-        .populate('person', 'name last_name degree description url_image career ')
+        Activity.find({ status: true })
+            .skip(desde)
+            .limit(limite)
+            .populate('person', 'name last_name degree description url_image career ')
 
-    .exec((err, activity) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
+        .exec((err, activity) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            //regresar el objeto
+            Activity.count({ status: true }, (err, conteo) => {
+                res.json({
+                    ok: true,
+                    activity,
+                    cuantos: conteo
+                });
             });
-        }
-        //regresar el objeto
-        Activity.count({ status: true }, (err, conteo) => {
-            res.json({
-                ok: true,
-                activity,
-                cuantos: conteo
-            });
-        });
 
 
 
-    })
-});
+        })
+    });
 // POST para crear registros
 app.post('/activity', verificaToken, function(req, res) {
     let body = req.body;
