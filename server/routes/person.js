@@ -88,7 +88,7 @@ app.get('/person/buscar/speaker', (req, res) => {
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Activity.find({ type_inscription: termino })
+    Person.find({ type_inscription: termino })
         .populate('person', 'name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 
