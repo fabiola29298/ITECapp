@@ -7,14 +7,14 @@ invited: -
 const express = require('express');
 const _ = require('underscore');
 const Assist = require('../models/assist');
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+//const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 const app = express();
 
 // ===========================
 //  Obtener 
 // ===========================
-app.get('/assist', verificaToken, (req, res) => {
+app.get('/assist', (req, res) => {
 
     Assist.find({ person: req.usuario._id, status: true })
         .populate('person', 'name  last_name email')
@@ -46,7 +46,7 @@ app.get('/assist', verificaToken, (req, res) => {
 
 });
 // POST para crear registros
-app.post('/assist', verificaToken, function(req, res) {
+app.post('/assist', function(req, res) {
     let body = req.body;
 
     let assist = new Assist({
@@ -73,7 +73,7 @@ app.post('/assist', verificaToken, function(req, res) {
 // ===========================
 //  Actualizar feedback
 // ===========================
-app.put('/assist/feedback/:id', verificaToken, (req, res) => {
+app.put('/assist/feedback/:id', (req, res) => {
     //let id = req.usuario._id;
     let id = req.params.id;
     let body = req.body;
@@ -109,7 +109,7 @@ app.put('/assist/feedback/:id', verificaToken, (req, res) => {
 
 });
 //DELETE cambiar de status a false
-app.delete('/assist/:id', [verificaToken], function(req, res) {
+app.delete('/assist/:id', function(req, res) {
     let id = req.params.id;
 
     let cambiaStatus = {

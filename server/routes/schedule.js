@@ -8,14 +8,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Schedule = require('../models/schedule');
-const { verificaToken } = require('../middlewares/autenticacion');
+//const { verificaToken } = require('../middlewares/autenticacion');
 
 const app = express();
 
 // ===========================
 //  Obtener el scedule del usuario
 // ===========================
-app.get('/schedule', verificaToken, (req, res) => {
+app.get('/schedule', (req, res) => {
     Schedule.find({ person: req.usuario._id, status: true })
         .populate('activity', 'name type date description start_time end_time classroom block_campus')
         .exec((err, scheduleDB) => {
@@ -45,7 +45,7 @@ app.get('/schedule', verificaToken, (req, res) => {
 
 });
 // POST para crear registros
-app.post('/schedule', verificaToken, function(req, res) {
+app.post('/schedule', function(req, res) {
     let body = req.body;
 
     let schedule = new Schedule({
@@ -67,7 +67,7 @@ app.post('/schedule', verificaToken, function(req, res) {
     });
 });
 //DELETE cambiar de status a false
-app.delete('/schedule/:id', [verificaToken], function(req, res) {
+app.delete('/schedule/:id', function(req, res) {
     let id = req.params.id;
 
     let cambiaStatus = {

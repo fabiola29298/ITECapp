@@ -10,12 +10,12 @@ const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Person = require('../models/person');
 
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+const { verificaAdmin_Role } = require('../middlewares/autenticacion');
 const app = express();
 
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
-app.get('/person', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.get('/person', function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -46,7 +46,7 @@ app.get('/person', [verificaToken, verificaAdmin_Role], function(req, res) {
         });
 });
 // POST para crear registros
-app.post('/person', verificaToken, function(req, res) {
+app.post('/person', function(req, res) {
     let body = req.body;
 
     let person = new Person({

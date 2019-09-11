@@ -10,13 +10,13 @@ const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Notifications = require('../models/notification');
 
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+//const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 const app = express();
 
 let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
-app.get('/notification', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.get('/notification', function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -47,7 +47,7 @@ app.get('/notification', [verificaToken, verificaAdmin_Role], function(req, res)
         });
 });
 // POST para crear registros
-app.post('/notification', verificaToken, function(req, res) {
+app.post('/notification', function(req, res) {
     let body = req.body;
 
     let notifications1 = new Notifications({

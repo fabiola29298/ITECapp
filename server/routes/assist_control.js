@@ -9,14 +9,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Control = require('../models/assist_control');
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+//const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 const app = express();
 
 // ===========================
 //  Obtener  
 // ===========================
-app.get('/control', [verificaToken, verificaAdmin_Role], (req, res) => {
+app.get('/control', (req, res) => {
     Control.find({ person: req.usuario._id, status: true })
         .populate('activity', 'name type date description start_time end_time classroom block_campus')
         .populate('person', 'name email')
@@ -47,7 +47,7 @@ app.get('/control', [verificaToken, verificaAdmin_Role], (req, res) => {
 
 });
 // POST para crear registros
-app.post('/control', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.post('/control', function(req, res) {
     let body = req.body;
 
     let control = new Control({

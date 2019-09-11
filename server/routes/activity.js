@@ -8,7 +8,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const Activity = require('../models/activity');
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+//const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 const app = express();
 
