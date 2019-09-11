@@ -16,7 +16,6 @@ let salto = bcrypt.genSaltSync(10);
 // GET para mostrar
 
 app.get('/activity',
-    //verificaToken,
     function(req, res) {
         let desde = req.query.desde || 0;
         desde = Number(desde);
@@ -51,7 +50,7 @@ app.get('/activity',
         })
     });
 // POST para crear registros
-app.post('/activity', verificaToken, function(req, res) {
+app.post('/activity', function(req, res) {
     let body = req.body;
 
     let activity = new Activity({
@@ -81,7 +80,7 @@ app.post('/activity', verificaToken, function(req, res) {
     });
 });
 // PUT Para actualizar registros
-app.put('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.put('/activity/:id', function(req, res) {
     let id = req.params.id;
 
     let body = _.pick(req.body, ['person', 'name', 'type', 'date', 'description', 'start_time', 'end_time', 'classroom', 'block_campus']);
@@ -102,7 +101,7 @@ app.put('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, res)
     });
 });
 //DELETE cambiar de status a false
-app.delete('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.delete('/activity/:id', function(req, res) {
     let id = req.params.id;
 
     let cambiaStatus = {
@@ -138,7 +137,7 @@ app.delete('/activity/:id', [verificaToken, verificaAdmin_Role], function(req, r
 // ===========================
 //  Buscar por tipo
 // ===========================
-app.get('/activity/buscar/tipo/:termino', verificaToken, (req, res) => {
+app.get('/activity/buscar/tipo/:termino', (req, res) => {
 
     let termino = req.params.termino;
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
@@ -168,7 +167,7 @@ app.get('/activity/buscar/tipo/:termino', verificaToken, (req, res) => {
 // ===========================
 //  Buscar por nombre
 // ===========================
-app.get('/activity/buscar/name/:termino', verificaToken, (req, res) => {
+app.get('/activity/buscar/name/:termino', (req, res) => {
 
     let termino = req.params.termino;
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas

@@ -18,7 +18,7 @@ let activitySchema = new Schema({
         required: [true, 'El tipo de la actividad es necesaria']
     },
     date: {
-        type: Date,
+        type: String,
         required: [true, 'La fecha de la actividad es necesaria']
     },
     description: {
@@ -26,11 +26,11 @@ let activitySchema = new Schema({
         required: [true, 'La descripcion de la actividad es necesaria']
     },
     start_time: {
-        type: Date,
+        type: String,
         required: [true, 'La fecha y hora de inicio de la actividad es necesaria']
     },
     end_time: {
-        type: Date,
+        type: String,
         required: [true, 'La fecha y hora final de la actividad es necesaria']
     },
     classroom: {
