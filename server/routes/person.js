@@ -79,5 +79,35 @@ app.post('/person', verificaToken, function(req, res) {
         });
     });
 });
+// ===========================
+//  Buscar por nombre de speakers
+// ===========================
+app.get('/person/buscar/speaker/', (req, res) => {
 
+    let termino = 'speaker';
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    //let regex = new RegExp(termino, 'i');
+
+    Activity.find({ type_inscription: regex })
+        .populate('person', 'name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+
+            res.json({
+                ok: true,
+                person: activityDB
+            })
+
+        })
+
+
+});
 module.exports = app;
