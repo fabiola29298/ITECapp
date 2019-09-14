@@ -27,7 +27,7 @@ app.get('/activity',
         Activity.find({ status: true })
             .skip(desde)
             .limit(limite)
-            .populate('person', 'name last_name degree description url_image career ')
+            .populate('person', '_id name last_name degree description url_image career ')
 
         .exec((err, activity) => {
             if (err) {
@@ -75,7 +75,7 @@ app.post('/activity', function(req, res) {
 
         res.json({
             ok: true,
-            activities: activityDB
+            activity: activityDB
         });
     });
 });
@@ -96,7 +96,7 @@ app.put('/activity/:id', function(req, res) {
 
         res.json({
             ok: true,
-            activities: activityDB
+            activity: activityDB
         });
     });
 });
@@ -128,7 +128,7 @@ app.delete('/activity/:id', function(req, res) {
 
         res.json({
             ok: true,
-            activities: activityDelete
+            activity: activityDelete
         });
     });
 });
@@ -174,6 +174,37 @@ app.get('/activity/buscar/name/:termino', (req, res) => {
     let regex = new RegExp(termino, 'i');
 
     Activity.find({ name: regex })
+        .populate('person', 'name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                activity: activityDB
+            })
+
+        })
+
+
+});
+
+// ===========================
+//  Buscar por id
+// ===========================
+app.get('/activity/buscar/id/:id', (req, res) => {
+
+    let termino = req.params.id;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    //let regex = new RegExp(termino, 'i');
+
+    Activity.find({ _id: termino })
         .populate('person', 'name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 

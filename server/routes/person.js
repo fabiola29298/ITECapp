@@ -19,7 +19,7 @@ app.get('/person', function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
-    let limite = req.query.limite || 5;
+    let limite = req.query.limite || 30;
     limite = Number(limite);
 
     Person.find({ status: true })
@@ -89,7 +89,7 @@ app.get('/person/buscar/speaker', (req, res) => {
     //let regex = new RegExp(termino, 'i');
 
     Person.find({ type_inscription: termino })
-        .populate('person', 'name last_name degree description url_image career ')
+        .populate('person', '_id name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 
 
@@ -100,6 +100,37 @@ app.get('/person/buscar/speaker', (req, res) => {
                 });
             }
 
+
+            res.json({
+                ok: true,
+                person: activityDB
+            })
+
+        })
+
+
+});
+
+// ===========================
+//  Buscar por id
+// ===========================
+app.get('/person/buscar/id/:id', (req, res) => {
+
+    let termino = req.params.id;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    //let regex = new RegExp(termino, 'i');
+
+    Person.find({ _id: termino })
+        .populate('person', '_id name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
 
             res.json({
                 ok: true,
