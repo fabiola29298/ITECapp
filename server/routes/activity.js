@@ -144,7 +144,7 @@ app.get('/activity/buscar/tipo/:termino', (req, res) => {
     let regex = new RegExp(termino, 'i');
 
     Activity.find({ type: regex })
-        .populate('person', 'name last_name degree description url_image career ')
+        .populate('person', '_id name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 
 
@@ -174,7 +174,7 @@ app.get('/activity/buscar/name/:termino', (req, res) => {
     let regex = new RegExp(termino, 'i');
 
     Activity.find({ name: regex })
-        .populate('person', 'name last_name degree description url_image career ')
+        .populate('person', '_id name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 
 
@@ -205,7 +205,38 @@ app.get('/activity/buscar/id/:id', (req, res) => {
     //let regex = new RegExp(termino, 'i');
 
     Activity.find({ _id: termino })
-        .populate('person', 'name last_name degree description url_image career ')
+        .populate('person', '_id name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                activity: activityDB
+            })
+
+        })
+
+
+});
+// ===========================
+//  Buscar por fecha
+// ===========================
+app.get('/activity/buscar/date/:date', (req, res) => {
+
+    let termino = req.params.date;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    let regex = new RegExp(termino, 'i');
+
+    Activity.find({ date: regex })
+        .populate('person', '_id name last_name degree description url_image career ')
+        .sort('date ASC')
         .exec((err, activityDB) => {
 
 

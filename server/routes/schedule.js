@@ -100,6 +100,35 @@ app.delete('/schedule/:id', function(req, res) {
         });
     });
 });
+// ===========================
+//  Buscar por fecha
+// ===========================
+app.get('/schedule/buscar/date/:date', (req, res) => {
 
+    let termino = req.params.date;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    let regex = new RegExp(termino, 'i');
+
+    Schedule.find({ 'activity.date': regex })
+        .sort('date ASC')
+        .exec((err, scheduleDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                schedule: scheduleDB
+            })
+
+        })
+
+
+});
 
 module.exports = app;
