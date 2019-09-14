@@ -15,7 +15,7 @@ const app = express();
 // ===========================
 //  Obtener el scedule del usuario
 // ===========================
-app.get('/schedule:id', (req, res) => {
+app.get('/schedule/:id', (req, res) => {
     let id = req.params.id;
     Schedule.find({ person: id, status: true })
         .populate('activity', 'name type date description start_time end_time classroom block_campus')
