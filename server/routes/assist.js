@@ -143,17 +143,18 @@ app.delete('/assist/:id', function(req, res) {
 });
 
 // ===========================
-//  Buscar por id person y id activity
+//  Buscar por id person y id control
 // ===========================
-app.get('/assist/buscar/id2/:idperson/:idassistcontrol', (req, res) => {
+app.get('/assist/buscar/pc/:idperson/:idassistcontrol', (req, res) => {
 
     let person = req.params.idperson;
     let assistcontrol = req.params.idassistcontrol;
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Person.find({ person: person, assistcontrol: assistcontrol })
+    Assist.find({ person: person, assistcontrol: assistcontrol })
         .populate('person', '_id name last_name degree description url_image career ')
+        .populate('assistcontrol', '_id activity person name_staff  name_activity ')
         .exec((err, activityDB) => {
 
 
@@ -176,13 +177,13 @@ app.get('/assist/buscar/id2/:idperson/:idassistcontrol', (req, res) => {
 // ===========================
 //  Buscar por  id activity
 // ===========================
-app.get('/assist/buscar/id1/:idassistcontrol', (req, res) => {
+app.get('/assist/buscar/c/:idassistcontrol', (req, res) => {
 
     let assistcontrol = req.params.idassistcontrol;
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Person.find({ assistcontrol: assistcontrol })
+    Assist.find({ assistcontrol: assistcontrol })
         .populate('person', '_id name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 
@@ -204,15 +205,15 @@ app.get('/assist/buscar/id1/:idassistcontrol', (req, res) => {
 
 });
 // ===========================
-//  Buscar por  id activity
+//  Buscar por  id person
 // ===========================
-app.get('/assist/buscar/id3/:idperson', (req, res) => {
+app.get('/assist/buscar/p/:idperson', (req, res) => {
 
     let person = req.params.idperson;
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Person.find({ person: person })
+    Assist.find({ person: person })
         .populate('person', '_id name last_name degree description url_image career ')
         .exec((err, activityDB) => {
 
