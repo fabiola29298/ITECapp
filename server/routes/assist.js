@@ -152,7 +152,7 @@ app.get('/assist/buscar/pc/:idperson/:idassistcontrol', (req, res) => {
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Assist.find({ person: person, assistcontrol: assistcontrol })
+    Assist.find({ person: person, assistcontrol: assistcontrol, status: true })
         .populate('person', '_id name last_name degree description url_image career ')
         .populate('assistcontrol', '_id activity person name_staff  name_activity ')
         .exec((err, activityDB) => {
@@ -175,7 +175,7 @@ app.get('/assist/buscar/pc/:idperson/:idassistcontrol', (req, res) => {
 
 });
 // ===========================
-//  Buscar por  id activity
+//  Buscar por  id control
 // ===========================
 app.get('/assist/buscar/c/:idassistcontrol', (req, res) => {
 
@@ -183,7 +183,7 @@ app.get('/assist/buscar/c/:idassistcontrol', (req, res) => {
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Assist.find({ assistcontrol: assistcontrol })
+    Assist.find({ assistcontrol: assistcontrol, status: true })
         .populate('person', '_id name last_name degree description url_image career ')
         .populate('assistcontrol', '_id activity person name_staff  name_activity ')
         .exec((err, activityDB) => {
@@ -214,7 +214,7 @@ app.get('/assist/buscar/p/:idperson', (req, res) => {
     // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
     //let regex = new RegExp(termino, 'i');
 
-    Assist.find({ person: person })
+    Assist.find({ person: person, status: true })
         .populate('person', '_id name last_name degree description url_image career ')
         .populate('assistcontrol', '_id activity person name_staff  name_activity ')
         .exec((err, activityDB) => {
