@@ -14,11 +14,11 @@ const app = express();
 // ===========================
 //  Obtener 
 // ===========================
-app.get('/assist', (req, res) => {
+app.get('/assist/all', (req, res) => {
 
-    Assist.find({ person: req.usuario._id, status: true })
-        .populate('person', 'name  last_name email')
-        .populate('assistcontrol', 'name_staff name_activity')
+    Assist.find({ status: true })
+        .populate('person', '_id name  last_name email')
+        .populate('assistcontrol', '_id activity person name_staff name_activity')
         .exec((err, assistDB) => {
 
             if (err) {
@@ -142,5 +142,95 @@ app.delete('/assist/:id', function(req, res) {
     });
 });
 
+// ===========================
+//  Buscar por id person y id activity
+// ===========================
+app.get('/assist/buscar/id2/:idperson/:idassistcontrol', (req, res) => {
 
+    let person = req.params.idperson;
+    let assistcontrol = req.params.idassistcontrol;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    //let regex = new RegExp(termino, 'i');
+
+    Person.find({ person: person, assistcontrol: assistcontrol })
+        .populate('person', '_id name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                assist: activityDB
+            })
+
+        })
+
+
+});
+// ===========================
+//  Buscar por  id activity
+// ===========================
+app.get('/assist/buscar/id1/:idassistcontrol', (req, res) => {
+
+    let assistcontrol = req.params.idassistcontrol;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    //let regex = new RegExp(termino, 'i');
+
+    Person.find({ assistcontrol: assistcontrol })
+        .populate('person', '_id name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                assist: activityDB
+            })
+
+        })
+
+
+});
+// ===========================
+//  Buscar por  id activity
+// ===========================
+app.get('/assist/buscar/id3/:idperson', (req, res) => {
+
+    let person = req.params.idperson;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    //let regex = new RegExp(termino, 'i');
+
+    Person.find({ person: person })
+        .populate('person', '_id name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                assist: activityDB
+            })
+
+        })
+
+
+});
 module.exports = app;
