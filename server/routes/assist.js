@@ -185,6 +185,7 @@ app.get('/assist/buscar/c/:idassistcontrol', (req, res) => {
 
     Assist.find({ assistcontrol: assistcontrol })
         .populate('person', '_id name last_name degree description url_image career ')
+        .populate('assistcontrol', '_id activity person name_staff  name_activity ')
         .exec((err, activityDB) => {
 
 
@@ -215,6 +216,7 @@ app.get('/assist/buscar/p/:idperson', (req, res) => {
 
     Assist.find({ person: person })
         .populate('person', '_id name last_name degree description url_image career ')
+        .populate('assistcontrol', '_id activity person name_staff  name_activity ')
         .exec((err, activityDB) => {
 
 
