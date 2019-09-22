@@ -17,7 +17,7 @@ const app = express();
 //  Obtener  
 // ===========================
 app.get('/control', (req, res) => {
-    Control.find({ person: req.usuario._id, status: true })
+    Control.find({ status: true })
         .populate('activity', 'name type date description start_time end_time classroom block_campus')
         .populate('person', 'name email')
         .exec((err, controlDB) => {
