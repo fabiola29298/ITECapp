@@ -223,6 +223,7 @@ app.get('/assist/buscar/p/:idperson', (req, res) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
+                    vacio: true,
                     err
                 });
             }

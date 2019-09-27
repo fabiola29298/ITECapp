@@ -20,7 +20,7 @@ app.get('/activity',
         let desde = req.query.desde || 0;
         desde = Number(desde);
 
-        let limite = req.query.limite || 50;
+        let limite = req.query.limite || 150;
         limite = Number(limite);
 
 
