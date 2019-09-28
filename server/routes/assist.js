@@ -161,6 +161,7 @@ app.get('/assist/buscar/pc/:idperson/:idassistcontrol', (req, res) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
+                    vacio: true,
                     err
                 });
             }
@@ -192,6 +193,7 @@ app.get('/assist/buscar/c/:idassistcontrol', (req, res) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
+                    vacio: true,
                     err
                 });
             }
@@ -226,6 +228,13 @@ app.get('/assist/buscar/p/:idperson', (req, res) => {
                     vacio: true,
                     err
                 });
+            }
+
+            if (activityDB == null || activityDB == []) {
+                res.json({
+                    ok: true,
+                    vacio: true
+                })
             }
 
             res.json({

@@ -173,4 +173,38 @@ app.get('/person/buscar/id/:id', (req, res) => {
 
 
 });
+
+
+// ===========================
+//  Buscar por nombre de participantes
+// ===========================
+app.get('/person/buscar/nombre/:termino', (req, res) => {
+
+    let termino = req.params.termino;
+    // creando expresion regular, y 'i' para no afectar cuando usas mayusculas
+    let regex = new RegExp(termino, 'i');
+
+    Person.find({ name: regex, last_name: regex })
+        .populate('person', '_id name last_name degree description url_image career ')
+        .exec((err, activityDB) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+
+            res.json({
+                ok: true,
+                person: activityDB
+            })
+
+        })
+
+
+});
+
 module.exports = app;
